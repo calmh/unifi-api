@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+
+import argparse
+
+from unifi.controller import Controller
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-c', '--controller', default='unifi', help='the controller address (default "unifi")')
+parser.add_argument('-u', '--username', default='admin', help='the controller usernane (default("admin")')
+parser.add_argument('-p', '--password', default='', help='the controller password')
+args = parser.parse_args()
+
+c = Controller(args.controller, args.username, args.password)
+c.login()
+
+aps = c.get_aps()
+
+FORMAT = '%-16s  %18s  %-12s  %4s  %4s  %3s  %3s'
+print(FORMAT % ('NAME', 'MAC', 'AP', 'CHAN', 'RSSI', 'RX', 'TX'))
+for ap in aps:
+    ap_name = ap['name']
+
+    for vap in ap['vap_table']:
+        channel = vap['channel']
+
+        for sta in vap['sta_table']:
+            name = sta['hostname'] or sta['ip'] or sta['mac']
+            rssi = sta['rssi']
+            mac = sta['mac']
+            rx = int(sta['rx_rate'] / 1000)
+            tx = int(sta['tx_rate'] / 1000)
+
+            print(FORMAT % (name, mac, ap_name, channel, rssi, rx, tx))
+
