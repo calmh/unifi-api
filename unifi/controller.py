@@ -10,7 +10,25 @@ class APIError(Exception):
     pass
 
 class Controller:
+    """Interact with a UniFi controller.
+
+    Uses the JSON interface on port 8443 (HTTPS) to communicate with a UniFi
+    controller. Operations will raise unifi.controller.APIError on obvious
+    problems (such as login failure), but many errors (such as disconnecting a
+    nonexistant client) will go unreported.
+
+    """
+
     def __init__(self, host, username, password):
+        """Create a Controller object.
+
+        Arguments:
+            host -- the address of the controller host; IP or name
+            username -- the username to log in with
+            password -- the password to log in with
+
+        """
+
         self.host = host
         self.username = username
         self.password = password
@@ -19,6 +37,8 @@ class Controller:
 
         cj = cookielib.CookieJar()
         self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+
+        self._login()
 
     def _jsondec(self, data):
         obj = json.loads(data)
@@ -33,21 +53,27 @@ class Controller:
         res = self.opener.open(url, params)
         return self._jsondec(res.read())
 
-    def login(self):
+    def _login(self):
         log.debug('login() as %s', self.username)
         params = urllib.urlencode({'login': 'login',
             'username': self.username, 'password': self.password})
         self.opener.open(self.url + 'login', params).read()
 
     def get_aps(self):
+        """Return a list of all AP:s, with significant information about each."""
+
         js = json.dumps({'_depth': 2, 'test': None})
         params = urllib.urlencode({'json': js})
         return self._read(self.url + 'api/stat/device', params)
 
     def get_clients(self):
+        """Return a list of all active clients, with significant information about each."""
+
         return self._read(self.url + 'api/stat/sta')
 
     def get_wlan_conf(self):
+        """Return a list of configured WLANs with their configuration parameters."""
+
         return self._read(self.url + 'api/list/wlanconf')
 
     def _mac_cmd(self, target_mac, command, mgr='stamgr'):
@@ -57,21 +83,59 @@ class Controller:
         self._read(self.url + 'api/cmd/' + mgr, params)
 
     def block_client(self, mac):
+        """Add a client to the block list.
+
+        Arguments:
+            mac -- the MAC address of the client to block.
+
+        """
+
         self._mac_cmd(mac, 'block-sta')
 
     def unblock_client(self, mac):
+        """Remove a client from the block list.
+
+        Arguments:
+            mac -- the MAC address of the client to unblock.
+
+        """
+
         self._mac_cmd(mac, 'unblock-sta')
 
-    def reconnect_client(self, mac):
+    def disconnect_client(self, mac):
+        """Disconnect a client.
+
+        Disconnects a client, forcing them to reassociate. Useful when the
+        connection is of bad quality to force a rescan.
+
+        Arguments:
+            mac -- the MAC address of the client to disconnect.
+
+        """
+
         self._mac_cmd(mac, 'kick-sta')
 
     def restart_ap(self, mac):
+        """Restart an access point (by MAC).
+
+        Arguments:
+            mac -- the MAC address of the AP to restart.
+
+        """
+
         self._mac_cmd(mac, 'restart', 'devmgr')
 
-    def restart_ap_name(self, apnamefilter=''):
-        aplist = self.get_aps()
-        for ap in aplist:
-            if ap.get('state', 0) == 1:
-                if 'name' in ap and ap['name'].startswith(apnamefilter):
-                    self.reboot_ap(ap['mac'])
+    def restart_ap_name(self, name):
+        """Restart an access point (by name).
+
+        Arguments:
+            name -- the name address of the AP to restart.
+
+        """
+
+        if not name:
+            raise APIError('%s is not a valid name' % str(name))
+        for ap in self.get_aps():
+            if ap.get('state', 0) == 1 and ap.get('name', None) == name:
+                self.reboot_ap(ap['mac'])
 
