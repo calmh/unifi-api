@@ -13,21 +13,19 @@ args = parser.parse_args()
 c = Controller(args.controller, args.username, args.password)
 
 aps = c.get_aps()
+ap_names = dict([(ap['mac'], ap['name']) for ap in aps])
+clients = c.get_clients()
+clients.sort(key=lambda x: -x['rssi'])
 
 FORMAT = '%-16s  %18s  %-12s  %4s  %4s  %3s  %3s'
 print(FORMAT % ('NAME', 'MAC', 'AP', 'CHAN', 'RSSI', 'RX', 'TX'))
-for ap in aps:
-    ap_name = ap['name']
+for client in clients:
+    ap_name = ap_names[client['ap_mac']]
+    name = client['hostname'] or client['ip'] or client['mac']
+    rssi = client['rssi']
+    mac = client['mac']
+    rx = int(client['rx_rate'] / 1000)
+    tx = int(client['tx_rate'] / 1000)
+    channel = client['channel']
 
-    for vap in ap['vap_table']:
-        channel = vap['channel']
-
-        for sta in vap['sta_table']:
-            name = sta['hostname'] or sta['ip'] or sta['mac']
-            rssi = sta['rssi']
-            mac = sta['mac']
-            rx = int(sta['rx_rate'] / 1000)
-            tx = int(sta['tx_rate'] / 1000)
-
-            print(FORMAT % (name, mac, ap_name, channel, rssi, rx, tx))
-
+    print(FORMAT % (name, mac, ap_name, channel, rssi, rx, tx))
