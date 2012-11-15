@@ -17,13 +17,22 @@ class Controller:
     problems (such as login failure), but many errors (such as disconnecting a
     nonexistant client) will go unreported.
 
+    >>> from unifi.controller import Controller
+    >>> c = Controller('192.168.1.99', 'admin', 'p4ssw0rd'
+    >>> for ap in c.get_aps():
+    ...     print 'AP named %s with MAC %s' % (ap['name'], ap['mac'])
+    ...
+    AP named Study with MAC dc:9f:db:1a:59:07
+    AP named Living Room with MAC dc:9f:db:1a:59:08
+    AP named Garage with MAC dc:9f:db:1a:59:0b
+
     """
 
     def __init__(self, host, username, password):
         """Create a Controller object.
 
         Arguments:
-            host -- the address of the controller host; IP or name
+            host     -- the address of the controller host; IP or name
             username -- the username to log in with
             password -- the password to log in with
 
