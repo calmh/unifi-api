@@ -28,7 +28,6 @@ if args.debug:
     log.setLevel(logging.DEBUG)
 
 c = Controller(args.controller, args.username, args.password)
-c.login()
 
 all_aps = c.get_aps()
 ap_names = dict([(ap['mac'], ap['name']) for ap in all_aps])

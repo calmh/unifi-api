@@ -11,7 +11,6 @@ parser.add_argument('-p', '--password', default='', help='the controller passwor
 args = parser.parse_args()
 
 c = Controller(args.controller, args.username, args.password)
-c.login()
 
 aps = c.get_aps()
 
