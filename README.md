@@ -3,6 +3,11 @@ unifi-api
 
 A rewrite of https://github.com/unifi-hackers/unifi-lab in cleaner Python.
 
+Install
+=======
+
+    sudo pip install -U unifi
+
 Example
 =======
 
