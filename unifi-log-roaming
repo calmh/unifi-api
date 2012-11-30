@@ -1,0 +1,36 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+
+import argparse
+import time
+
+from unifi.controller import Controller
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-c', '--controller', default='unifi', help='the controller address (default "unifi")')
+parser.add_argument('-u', '--username', default='admin', help='the controller usernane (default "admin")')
+parser.add_argument('-p', '--password', default='', help='the controller password')
+args = parser.parse_args()
+
+c = Controller(args.controller, args.username, args.password)
+
+aps = c.get_aps()
+ap_names = dict([(ap['mac'], ap['name']) for ap in aps])
+
+client_aps = {}
+while True:
+    clients = c.get_clients()
+    for client in clients:
+        ap = ap_names[client['ap_mac']]
+        mac = client['mac']
+        name = client['hostname'] or client['ip'] or client['mac']
+        channel = client['channel']
+        rssi = client['rssi']
+        key = '%s/%d' % (ap, channel)
+
+        if mac in client_aps:
+            if client_aps[mac] != key:
+                print('%s roamed %s -> %s' % (name, client_aps[mac], key))
+        client_aps[mac] = key
+    time.sleep(10)
