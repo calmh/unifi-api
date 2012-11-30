@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
-import logging
+from __future__ import print_function
+
 import argparse
-import os
-import sys
 import time
 from collections import defaultdict
 
@@ -11,21 +10,13 @@ from unifi.controller import Controller
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--controller', default='unifi', help='the controller address (default "unifi")')
-parser.add_argument('-u', '--username', default='admin', help='the controller usernane (default("admin")')
+parser.add_argument('-u', '--username', default='admin', help='the controller usernane (default "admin")')
 parser.add_argument('-p', '--password', default='', help='the controller password')
 parser.add_argument('-m', '--minsnr', default=15, type=int, help='(dB) minimum required client SNR (default 15)')
 parser.add_argument('-i', '--checkintv', default=5, type=int, help='(s) check interval (default 5)')
 parser.add_argument('-o', '--holdintv', default=300, type=int, help='(s) holddown interval (default 300)')
 parser.add_argument('-d', '--debug', help='enable debug output', action='store_true')
 args = parser.parse_args()
-
-logging.basicConfig(level=logging.INFO,
-        format='%(asctime)s %(levelname)s %(name)s: %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S')
-log = logging.getLogger(os.path.basename(sys.argv[0]))
-
-if args.debug:
-    log.setLevel(logging.DEBUG)
 
 c = Controller(args.controller, args.username, args.password)
 
@@ -38,25 +29,26 @@ while True:
     res = c.get_clients()
     now = time.time()
 
-    log.debug('Got %d clients to check', len(res))
+    if args.debug:
+        print('Got %d clients to check' % len(res))
     for sta in res:
         name = sta['hostname']
         snr = sta['rssi']
         mac = sta['mac']
         ap_mac = sta['ap_mac']
         ap_name = ap_names[ap_mac]
-        log.debug('%s/%s@%s %d', name, mac, ap_name, snr)
+        if args.debug:
+            print('%s/%s@%s %d' % (name, mac, ap_name, snr))
         if snr < args.minsnr:
             if now - kicks[name] > args.holdintv:
-                log.info('Disconnecting %s/%s@%s (SNR %d dB < %d dB)',
-                        name, mac, ap_name, snr, args.minsnr)
+                print('Disconnecting %s/%s@%s (SNR %d dB < %d dB)' % (name, mac, ap_name, snr, args.minsnr))
                 c.disconnect_client(mac)
                 kicks[name] = now
                 held[name] = False
             elif not held[name]:
                 held[name] = True
-                log.debug('Ignoring %s/%s@%s (SNR %d dB < %d dB) (holddown)',
-                        name, mac, ap_name, snr, args.minsnr)
+                if args.debug:
+                    print('Ignoring %s/%s@%s (SNR %d dB < %d dB) (holddown)' % (name, mac, ap_name, snr, args.minsnr))
 
     time.sleep(args.checkintv)
 
