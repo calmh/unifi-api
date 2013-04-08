@@ -21,7 +21,7 @@ FORMAT = '%-16s  %18s  %-12s  %4s  %4s  %3s  %3s'
 print(FORMAT % ('NAME', 'MAC', 'AP', 'CHAN', 'RSSI', 'RX', 'TX'))
 for client in clients:
     ap_name = ap_names[client['ap_mac']]
-    name = client['hostname'] or client['ip'] or client['mac']
+    name = client.get('hostname') or client.get('ip', 'Unknown')
     rssi = client['rssi']
     mac = client['mac']
     rx = int(client['rx_rate'] / 1000)
