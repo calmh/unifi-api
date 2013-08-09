@@ -156,3 +156,11 @@ class Controller:
             if ap.get('state', 0) == 1 and ap.get('name', None) == name:
                 self.reboot_ap(ap['mac'])
 
+    def create_backup(self):
+        """Ask controller to create a backup archive file, response contains the path to the backup file."""
+
+        js = json.dumps({'cmd':'backup'})
+        params = urllib.urlencode({'json': js})
+        answer = self._read(self.url + 'api/cmd/system', params)
+
+        return answer[0].get('url')
