@@ -172,8 +172,9 @@ class Controller:
     def get_backup(self, target_file='unifi-backup.unf'):
         """Get a backup archive from a controller.
 
-        Creates, then downloads a backup archive to a specified file.
-        It should have a .unf extension for restore.
+        Arguments:
+            target_file -- Filename or full path to download the backup archive to, should have .unf extension for restore.
+
         """
         download_path = self.create_backup()
 
