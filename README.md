@@ -124,6 +124,19 @@ Remove a client from the block list.
 
  - `mac` -- the MAC address of the client to unblock.
 
+### `create_backup(self)`
+
+Tells the controller to create a backup archive that can be downloaded with download_backup() and
+then  be used to restore a controller on another machine.
+
+Remember that this puts significant load on a controller for some time (depending on the amount of users and managed APs).
+
+### `get_backup(self, targetfile)`
+
+Tells the controller to create a backup archive and downloads it to a file. It should have a .unf extension for later restore.
+
+ - `targetfile` -- the target file name, you can also use a full path. Default creates unifi-backup.unf in the current directoy.
+
 License
 -------
 
