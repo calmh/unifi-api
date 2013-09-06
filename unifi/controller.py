@@ -111,6 +111,16 @@ class Controller:
 
         return self._read(self.api_url + 'stat/sta')
 
+    def get_users(self):
+        """Return a list of all known clients, with significant information about each."""
+		
+        return self._read(self.api_url + 'list/user')
+
+    def get_user_groups(self):
+        """Return a list of user groups with its rate limiting settings."""
+		
+        return self._read(self.api_url + 'list/usergroup')
+
     def get_wlan_conf(self):
         """Return a list of configured WLANs with their configuration parameters."""
 
