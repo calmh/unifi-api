@@ -61,6 +61,38 @@ for ap in c.get_aps():
 See also the scripts `unifi-ls-clients` and `unifi-low-rssi-reconnect` for more
 examples of how to use the API.
 
+UniFi v3 Compatibility and Migration
+------------------------------------
+With the release of v3, UniFi gained multisite support which requires some
+changes on how to interract with the API . Currently we assume v2 to be the
+default, thus: Updating the API WON'T BREAK existing code using this API.
+
+Though, for continued v2 usage we **recommend** you start explicitely
+instanciating your controller in v2 mode for the day the default assumption
+starts to be v3 or newer:
+
+```python
+c = Controller('192.168.1.99', 'admin', 'p4ssw0rd', 'v2')
+```
+
+With UniFi v3, connecting to the first (`default`) site, is as easy as
+instanciating a controller in v3 mode:
+
+```python
+c = Controller('192.168.1.99', 'admin', 'p4ssw0rd', 'v3')
+```
+
+Connecting to a site other than `default` requires indication of both version
+and the site ID:
+
+```python
+c = Controller('192.168.1.99', 'admin', 'p4ssw0rd', 'v3', 'myothersite')
+```
+
+You can find about the site ID by selecting the site in the UniFi web interface,
+i.e. "My other site". Then you can find ia its URL (`https://localhost:8443/manage/s/foobar`)
+that the site ID is `myothersite`.
+
 API
 ---
 
