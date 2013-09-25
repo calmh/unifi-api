@@ -16,10 +16,10 @@ The following small utilities are bundled with the API:
 ### unifi-ls-clients
 
 Lists the currently active clients on the networks. Takes parameters for
-controller, username, password.
+controller, username, password, controller version and site ID (UniFi >= 3.x)
 
 ```
-jb@unifi:~ % unifi-ls-clients -c localhost -u admin -p p4ssw0rd
+jb@unifi:~ % unifi-ls-clients -c localhost -u admin -p p4ssw0rd -v v3 -s default
 NAME                             MAC  AP            CHAN  RSSI   RX   TX
 client-kitchen     00:24:36:9a:0d:ab  Study          100    51  300  216
 jborg-mbp          28:cf:da:d6:46:20  Study          100    45  300  300
@@ -41,7 +41,7 @@ According to that, an SNR of 15 dB seems like a good cutoff, and that's also
 the default value in the script. You can set a higher value for testing:
 
 ```
-jb@unifi:~ % unifi-low-snr-reconnect -c localhost -u admin -p p4ssw0rd --minsnr 30
+jb@unifi:~ % unifi-low-snr-reconnect -c localhost -u admin -p p4ssw0rd -v v3 -s default --minsnr 30
 2012-11-15 11:23:01 INFO unifi-low-snr-reconnect: Disconnecting jb-ipad/1c:ab:a7:af:05:65@Study (SNR 22 dB < 30 dB)
 2012-11-15 11:23:01 INFO unifi-low-snr-reconnect: Disconnecting Annas-Iphone/74:e2:f5:97:da:7e@Living Room (SNR 29 dB < 30 dB)
 ```
