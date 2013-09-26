@@ -157,10 +157,30 @@ class Controller:
                 self.reboot_ap(ap['mac'])
 
     def create_backup(self):
-        """Ask controller to create a backup archive file, response contains the path to the backup file."""
+        """Ask controller to create a backup archive file, response contains the path to the backup file.
 
-        js = json.dumps({'cmd':'backup'})
+        Warning: This process puts significant load on the controller may
+                 render it partially unresponsive for other requests.
+        """
+
+        js = json.dumps({'cmd': 'backup'})
         params = urllib.urlencode({'json': js})
         answer = self._read(self.url + 'api/cmd/system', params)
 
         return answer[0].get('url')
+
+    def get_backup(self, target_file='unifi-backup.unf'):
+        """Get a backup archive from a controller.
+
+        Arguments:
+            target_file -- Filename or full path to download the backup archive to, should have .unf extension for restore.
+
+        """
+        download_path = self.create_backup()
+
+        opener = self.opener.open(self.url + downlodad_path)
+        unifi_archive = opener.read()
+
+        backupfile = open(target_file, 'w')
+        backupfile.write(unifi_archive)
+        backupfile.close()
