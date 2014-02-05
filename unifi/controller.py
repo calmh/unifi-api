@@ -186,7 +186,7 @@ class Controller:
             raise APIError('%s is not a valid name' % str(name))
         for ap in self.get_aps():
             if ap.get('state', 0) == 1 and ap.get('name', None) == name:
-                self.reboot_ap(ap['mac'])
+                self.restart_ap(ap['mac'])
 
     def create_backup(self):
         """Ask controller to create a backup archive file, response contains the path to the backup file.
