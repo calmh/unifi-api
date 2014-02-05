@@ -113,12 +113,12 @@ class Controller:
 
     def get_users(self):
         """Return a list of all known clients, with significant information about each."""
-		
+
         return self._read(self.api_url + 'list/user')
 
     def get_user_groups(self):
         """Return a list of user groups with its rate limiting settings."""
-		
+
         return self._read(self.api_url + 'list/usergroup')
 
     def get_wlan_conf(self):
@@ -128,8 +128,7 @@ class Controller:
 
     def _mac_cmd(self, target_mac, command, mgr='stamgr'):
         log.debug('_mac_cmd(%s, %s)', target_mac, command)
-        params = urllib.urlencode({'json':
-            {'mac': target_mac, 'cmd': command}})
+        params = urllib.urlencode({'json': json.dumps({'mac': target_mac, 'cmd': command})})
         self._read(self.api_url + 'cmd/' + mgr, params)
 
     def block_client(self, mac):
