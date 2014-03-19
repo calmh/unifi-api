@@ -210,7 +210,7 @@ class Controller:
         """
         download_path = self.create_backup()
 
-        opener = self.opener.open(self.url + downlodad_path)
+        opener = self.opener.open(self.url + download_path)
         unifi_archive = opener.read()
 
         backupfile = open(target_file, 'w')
