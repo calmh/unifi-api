@@ -99,6 +99,11 @@ class Controller:
             'username': self.username, 'password': self.password})
         self.opener.open(self.url + 'login', params).read()
 
+    def get_alerts(self):
+        """Return a list of all Alerts."""
+
+        return self._read(self.api_url + 'list/alarm')
+
     def get_aps(self):
         """Return a list of all AP:s, with significant information about each."""
 
