@@ -125,6 +125,10 @@ Disconnects a client, forcing them to reassociate. Useful when the
 connection is of bad quality to force a rescan.
 
  - `mac` -- the MAC address of the client to disconnect.
+
+### `get_alerts(self)`
+
+Return a list of Alerts.
  
 ### `get_aps(self)`
 
@@ -163,6 +167,10 @@ Restart an access point (by name).
 Remove a client from the block list.
 
  - `mac` -- the MAC address of the client to unblock.
+
+### `archive_all_alerts(self)`
+
+Archive all alerts of site.
 
 ### `create_backup(self)`
 
