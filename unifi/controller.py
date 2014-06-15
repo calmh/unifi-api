@@ -199,7 +199,6 @@ class Controller:
         js = json.dumps({'cmd': 'archive-all-alarms'})
         params = urllib.urlencode({'json': js})
         answer = self._read(self.api_url + 'cmd/evtmgr', params)
-        print "Archived all Alerts"
         
     def create_backup(self):
         """Ask controller to create a backup archive file, response contains the path to the backup file.
