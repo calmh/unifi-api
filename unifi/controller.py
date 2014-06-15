@@ -99,6 +99,11 @@ class Controller:
             'username': self.username, 'password': self.password})
         self.opener.open(self.url + 'login', params).read()
 
+    def get_alerts(self):
+        """Return a list of all Alerts."""
+
+        return self._read(self.api_url + 'list/alarm')
+
     def get_aps(self):
         """Return a list of all AP:s, with significant information about each."""
 
@@ -188,6 +193,13 @@ class Controller:
             if ap.get('state', 0) == 1 and ap.get('name', None) == name:
                 self.restart_ap(ap['mac'])
 
+    def archive_all_alerts(self):
+        """Archive all Alerts
+        """
+        js = json.dumps({'cmd': 'archive-all-alarms'})
+        params = urllib.urlencode({'json': js})
+        answer = self._read(self.api_url + 'cmd/evtmgr', params)
+        
     def create_backup(self):
         """Ask controller to create a backup archive file, response contains the path to the backup file.
 
