@@ -129,6 +129,10 @@ connection is of bad quality to force a rescan.
 ### `get_alerts(self)`
 
 Return a list of Alerts.
+
+### `get_alerts_unarchived(self)`
+
+Return a list of unarchived Alerts.
  
 ### `get_aps(self)`
 
