@@ -129,9 +129,12 @@ connection is of bad quality to force a rescan.
 ### `get_alerts(self)`
 
 Return a list of Alerts.
- 
-### `get_aps(self)`
 
+### `get_events(self)`
+
+Return a list of Events.
+
+### `get_aps(self)`
 Return a list of all AP:s, with significant information about each.
  
 ### `get_clients(self)`
