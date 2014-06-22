@@ -130,11 +130,16 @@ connection is of bad quality to force a rescan.
 
 Return a list of Alerts.
 
+### `get_alerts_unarchived(self)`
+
+Return a list of unarchived Alerts.
+ 
 ### `get_events(self)`
 
 Return a list of Events.
 
 ### `get_aps(self)`
+
 Return a list of all AP:s, with significant information about each.
  
 ### `get_clients(self)`

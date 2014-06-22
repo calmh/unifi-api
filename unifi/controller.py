@@ -103,6 +103,13 @@ class Controller:
         """Return a list of all Alerts."""
 
         return self._read(self.api_url + 'list/alarm')
+        
+    def get_alerts_unarchived(self):
+        """Return a list of Alerts unarchived."""
+
+        js = json.dumps({'_sort': '-time', 'archived':False})
+        params = urllib.urlencode({'json': js})
+        return self._read(self.api_url + 'list/alarm', params)
 
     def get_events(self):
         """Return a list of all Events."""
