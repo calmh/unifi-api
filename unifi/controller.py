@@ -111,6 +111,11 @@ class Controller:
         params = urllib.urlencode({'json': js})
         return self._read(self.api_url + 'list/alarm', params)
 
+    def get_events(self):
+        """Return a list of all Events."""
+
+        return self._read(self.api_url + 'stat/event')
+
     def get_aps(self):
         """Return a list of all AP:s, with significant information about each."""
 

@@ -134,6 +134,10 @@ Return a list of Alerts.
 
 Return a list of unarchived Alerts.
  
+### `get_events(self)`
+
+Return a list of Events.
+
 ### `get_aps(self)`
 
 Return a list of all AP:s, with significant information about each.
