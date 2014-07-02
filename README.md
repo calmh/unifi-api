@@ -146,6 +146,16 @@ Return a list of all AP:s, with significant information about each.
 
 Return a list of all active clients, with significant information about each.
 
+### `get_statistics_last_24h(self)`
+
+Return statistical data of the last 24h
+
+### `get_statistics_24h(self, endtime)`
+
+Return statistical data last 24h from endtime
+
+ - `endtime` -- the last time of statistics.
+        
 ### `get_users(self)`
 
 Return a list of all known clients, with significant information about each.
