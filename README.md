@@ -48,6 +48,14 @@ jb@unifi:~ % unifi-low-snr-reconnect -c localhost -u admin -p p4ssw0rd -v v3 -s 
 
 For production use, launching the script into the background is recommended...
 
+### unifi-save-statistics
+
+Get a csv file with statistics
+
+```
+unifi-save-statistics -c localhost -u admin -p p4ssw0rd -v v3 -s default -f filename.csv
+```
+
 API Example
 -----------
 
