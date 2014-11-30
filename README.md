@@ -117,9 +117,12 @@ nonexistant client) will go unreported.
 
 Create a Controller object.
      
- - `host` -- the address of the controller host; IP or name
- - `username` -- the username to log in with
- - `password` -- the password to log in with
+ - `host`		-- the address of the controller host; IP or name
+ - `username`	-- the username to log in with
+ - `password`	-- the password to log in with
+ -  `port`		-- the port of the controller host
+ -  `version`	-- the base version of the controller API [v2|v3]
+ -  `site_id`	-- the site ID to connect to (UniFi >= 3.x) 
  
 ### `block_client(self, mac)`
 
@@ -210,6 +213,22 @@ Remember that this puts significant load on a controller for some time (dependin
 Tells the controller to create a backup archive and downloads it to a file. It should have a .unf extension for later restore.
 
  - `targetfile` -- the target file name, you can also use a full path. Default creates unifi-backup.unf in the current directoy.
+ 
+### `authorize_guest(self, guest_mac, minutes, up_bandwidth=None, down_bandwidth=None, byte_quota=None, ap_mac=None)`
+
+Authorize a guest based on his MAC address.
+
+   - `guest_mac`     -- the guest MAC address : aa:bb:cc:dd:ee:ff
+   - `minutes`      -- duration of the authorization in minutes
+   - `up_bandwith`  -- up speed allowed in kbps (optional)
+   - `down_bandwith` -- down speed allowed in kbps (optional)
+   - `byte_quota`    -- quantity of bytes allowed in MB (optional)
+   - `ap_mac`        -- access point MAC address (UniFi >= 3.x) (optional)
+ 
+### `unauthorize_guest(self, guest_mac)`
+Unauthorize a guest based on his MAC address.
+
+  - `guest_mac` -- the guest MAC address : aa:bb:cc:dd:ee:ff
 
 License
 -------
