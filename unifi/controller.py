@@ -52,7 +52,7 @@ class Controller:
             username -- the username to log in with
             password -- the password to log in with
             port     -- the port of the controller host
-            version  -- the base version of the controller API [v2|v3]
+            version  -- the base version of the controller API [v2|v3|v4]
             site_id  -- the site ID to connect to (UniFi >= 3.x)
 
         """
@@ -72,7 +72,7 @@ class Controller:
 
         self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
 
-        self._login()
+        self._login(version)
 
     def __del__(self):
         if self.opener != None:
@@ -106,14 +106,21 @@ class Controller:
             return V2_PATH
         if(version == 'v3'):
             return V3_PATH
+        if(version == 'v4'):
+            return V3_PATH
         else:
             return V2_PATH
 
-    def _login(self):
+    def _login(self, version):
         log.debug('login() as %s', self.username)
-        params = urllib.urlencode({'login': 'login',
+        
+        if(version == 'v4'):
+            params = "{'username':'" + self.username + "','password':'" + self.password + "'}"
+            self.opener.open(self.url + 'api/login', params).read()
+        else:
+            params = urllib.urlencode({'login': 'login',
                                    'username': self.username, 'password': self.password})
-        self.opener.open(self.url + 'login', params).read()
+            self.opener.open(self.url + 'login', params).read()
 
     def _logout(self):
         log.debug('logout()')
