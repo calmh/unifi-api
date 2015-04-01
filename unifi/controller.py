@@ -24,6 +24,7 @@ if PYTHON_VERSION == 2:
 elif PYTHON_VERSION == 3:
     import http.cookiejar as cookielib
     import urllib3
+    import ast
 
 import json
 import logging
@@ -107,9 +108,16 @@ class Controller:
 
     def _read(self, url, params=None):
         if PYTHON_VERSION == 3:
-            # Can't send str data in Python 3
-            params = params.encode("UTF-8")
-        res = self.opener.open(url, params)
+            if params is not None:
+                params = ast.literal_eval(params)
+                #print (params)
+                params = urllib.parse.urlencode(params)
+                params = params.encode('utf-8')
+                res = self.opener.open(url, params)
+            else:
+                res = self.opener.open(url)
+        elif PYTHON_VERSION == 2:
+            res = self.opener.open(url, params)
         return self._jsondec(res.read())
 
     def _construct_api_path(self, version):
@@ -144,7 +152,7 @@ class Controller:
                                    'username': self.username, 'password': self.password})
             elif PYTHON_VERSION == 3:
                 params = urllib.parse.urlencode({'login': 'login',
-                                   'username': self.username, 'password': self.password}).encode("UTF8")
+                                   'username': self.username, 'password': self.password}).encode("UTF-8")
             self.opener.open(self.url + 'login', params).read()
 
     def _logout(self):
@@ -185,8 +193,8 @@ class Controller:
     def get_aps(self):
         """Return a list of all AP:s, with significant information about each."""
 
-        js = json.dumps({'_depth': 2, 'test': None})
-        params = urllib.urlencode({'json': js})
+        #Set test to 0 instead of NULL
+        params = json.dumps({'_depth': 2, 'test': 0})
         return self._read(self.api_url + 'stat/device', params)
 
     def get_clients(self):
