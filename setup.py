@@ -1,7 +1,13 @@
 #!/usr/bin/env python
 
 from distutils.core import setup
-from commands import getoutput
+import sys
+
+if sys.version_info[0] == 2:
+    from commands import getoutput
+elif sys.version_info[0] == 3:
+    from subprocess import getoutput
+
 
 version = getoutput('git describe --always') or '1.0'
 

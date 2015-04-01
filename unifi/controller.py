@@ -4,17 +4,31 @@ try:
     # urllib2.URLError: <urlopen error [Errno 1] _ssl.c:504:
     # error:14077438:SSL routines:SSL23_GET_SERVER_HELLO:tlsv1 alert internal error>
     import _ssl
-    _ssl.PROTOCOL_SSLv23 = _ssl.PROTOCOL_SSLv3
+    _ssl.PROTOCOL_SSLv23 = _ssl.PROTOCOL_TLSv1
 except:
     pass
 
+try:
+    # Updated for python certificate validation
+    import ssl
+    ssl._create_default_https_context = ssl._create_unverified_context
+except:
+    pass
 
-import cookielib
+import sys
+PYTHON_VERSION = sys.version_info[0]
+
+if PYTHON_VERSION == 2:
+    import cookielib
+    import urllib2
+elif PYTHON_VERSION == 3:
+    import http.cookiejar as cookielib
+    import urllib3
+
 import json
 import logging
 from time import time
 import urllib
-import urllib2
 
 
 log = logging.getLogger(__name__)
@@ -69,8 +83,10 @@ class Controller:
         log.debug('Controller for %s', self.url)
 
         cj = cookielib.CookieJar()
-
-        self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+        if PYTHON_VERSION == 2:
+            self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+        elif PYTHON_VERSION == 3:
+            self.opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
 
         self._login(version)
 
@@ -79,6 +95,8 @@ class Controller:
             self._logout()
 
     def _jsondec(self, data):
+        if PYTHON_VERSION == 3:
+            data = data.decode()
         obj = json.loads(data)
         if 'meta' in obj:
             if obj['meta']['rc'] != 'ok':
@@ -88,6 +106,9 @@ class Controller:
         return obj
 
     def _read(self, url, params=None):
+        if PYTHON_VERSION == 3:
+            # Can't send str data in Python 3
+            params = params.encode("UTF-8")
         res = self.opener.open(url, params)
         return self._jsondec(res.read())
 
@@ -118,8 +139,12 @@ class Controller:
             params = "{'username':'" + self.username + "','password':'" + self.password + "'}"
             self.opener.open(self.url + 'api/login', params).read()
         else:
-            params = urllib.urlencode({'login': 'login',
+            if PYTHON_VERSION == 2:
+                params = urllib.urlencode({'login': 'login',
                                    'username': self.username, 'password': self.password})
+            elif PYTHON_VERSION == 3:
+                params = urllib.parse.urlencode({'login': 'login',
+                                   'username': self.username, 'password': self.password}).encode("UTF8")
             self.opener.open(self.url + 'login', params).read()
 
     def _logout(self):
@@ -187,7 +212,10 @@ class Controller:
     def _run_command(self, command, params={}, mgr='stamgr'):
         log.debug('_run_command(%s)', command)
         params.update({'cmd': command})
-        return self._read(self.api_url + 'cmd/' + mgr, urllib.urlencode({'json': json.dumps(params)}))
+        if PYTHON_VERSION == 2:
+            return self._read(self.api_url + 'cmd/' + mgr, urllib.urlencode({'json': json.dumps(params)}))
+        elif PYTHON_VERSION == 3:
+            return self._read(self.api_url + 'cmd/' + mgr, urllib.parse.urlencode({'json': json.dumps(params)}))
 
     def _mac_cmd(self, target_mac, command, mgr='stamgr'):
         log.debug('_mac_cmd(%s, %s)', target_mac, command)
