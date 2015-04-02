@@ -9,12 +9,13 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--controller', default='unifi', help='the controller address (default "unifi")')
 parser.add_argument('-u', '--username', default='admin', help='the controller usernane (default("admin")')
 parser.add_argument('-p', '--password', default='', help='the controller password')
+parser.add_argument('-b', '--port', default='8443', help='the controller port (default "8443")')
 parser.add_argument('-v', '--version', default='v2', help='the controller base version (default "v2")')
 parser.add_argument('-s', '--siteid', default='default', help='the site ID, UniFi >=3.x only (default "default")')
 parser.add_argument('-f', '--file', default='statistics-unifi.csv', help='the filename of write statistics')
 args = parser.parse_args()
 
-c = Controller(args.controller, args.username, args.password, args.version, args.siteid)
+c = Controller(args.controller, args.username, args.password, args.port, args.version, args.siteid)
 
 statistics = c.get_statistics_last_24h()
 
