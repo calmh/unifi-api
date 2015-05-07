@@ -7,7 +7,7 @@ from unifi.controller import Controller
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--controller', default='unifi', help='the controller address (default "unifi")')
-parser.add_argument('-u', '--username', default='admin', help='the controller usernane (default("admin")')
+parser.add_argument('-u', '--username', default='admin', help='the controller username (default("admin")')
 parser.add_argument('-p', '--password', default='', help='the controller password')
 parser.add_argument('-b', '--port', default='8443', help='the controller port (default "8443")')
 parser.add_argument('-v', '--version', default='v2', help='the controller base version (default "v2")')
