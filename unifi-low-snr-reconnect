@@ -35,16 +35,17 @@ while True:
     if args.debug:
         print('Got %d clients to check' % len(res))
     for sta in res:
-        name = sta['hostname']
+        name = sta.get('hostname','')
         snr = sta['rssi']
         mac = sta['mac']
         ap_mac = sta['ap_mac']
         ap_name = ap_names[ap_mac]
+	essid = sta['essid']
         if args.debug:
             print('%s/%s@%s %d' % (name, mac, ap_name, snr))
         if snr < args.minsnr:
             if now - kicks[name] > args.holdintv:
-                print('Disconnecting %s/%s@%s (SNR %d dB < %d dB)' % (name, mac, ap_name, snr, args.minsnr))
+                print('Disconnecting %s/%s@%s (SNR %d dB < %d dB) on %s' % (name, mac, ap_name, snr, args.minsnr,essid))
                 c.disconnect_client(mac)
                 kicks[name] = now
                 held[name] = False
