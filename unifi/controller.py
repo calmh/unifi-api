@@ -143,17 +143,14 @@ class Controller:
     def _login(self, version):
         log.debug('login() as %s', self.username)
 
+        params = {'username': self.username, 'password': self.password}
         login_url = self.url
+
         if version is 'v4':
             login_url += 'api/login'
+            params = json.dumps(params)
         else:
             login_url += 'login'
-
-        params = {'username': self.username, 'password': self.password}
-
-        if version is 'v4':
-            params = str(params)
-        else:
             params.update({'login': 'login'})
             if PYTHON_VERSION is 2:
                 params = urllib.urlencode(params)
