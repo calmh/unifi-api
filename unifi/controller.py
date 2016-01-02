@@ -142,18 +142,25 @@ class Controller:
 
     def _login(self, version):
         log.debug('login() as %s', self.username)
-        
-        if(version == 'v4'):
-            params = "{'username':'" + self.username + "','password':'" + self.password + "'}"
-            self.opener.open(self.url + 'api/login', params).read()
+
+        params = {'username': self.username, 'password': self.password}
+        login_url = self.url
+
+        if version is 'v4':
+            login_url += 'api/login'
+            params = json.dumps(params)
         else:
-            if PYTHON_VERSION == 2:
-                params = urllib.urlencode({'login': 'login',
-                                   'username': self.username, 'password': self.password})
-            elif PYTHON_VERSION == 3:
-                params = urllib.parse.urlencode({'login': 'login',
-                                   'username': self.username, 'password': self.password}).encode("UTF-8")
-            self.opener.open(self.url + 'login', params).read()
+            login_url += 'login'
+            params.update({'login': 'login'})
+            if PYTHON_VERSION is 2:
+                params = urllib.urlencode(params)
+            elif PYTHON_VERSION is 3:
+                params = urllib.parse.urlencode(params)
+
+        if PYTHON_VERSION is 3:
+            params = params.encode("UTF-8")
+
+        self.opener.open(login_url, params).read()
 
     def _logout(self):
         log.debug('logout()')
