@@ -146,7 +146,7 @@ class Controller:
         params = {'username': self.username, 'password': self.password}
         login_url = self.url
 
-        if version is 'v4':
+        if version == 'v4':
             login_url += 'api/login'
             params = json.dumps(params)
         else:
