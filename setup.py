@@ -9,10 +9,8 @@ elif sys.version_info[0] == 3:
     from subprocess import getoutput
 
 
-version = getoutput('git describe --always') or '1.0'
-
 setup(name='unifi',
-      version=version,
+      version='1.2.5',
       description='API towards Ubiquity Networks UniFi controller',
       author='Jakob Borg',
       author_email='jakob@nym.se',
