@@ -67,7 +67,7 @@ class Controller:
             username -- the username to log in with
             password -- the password to log in with
             port     -- the port of the controller host
-            version  -- the base version of the controller API [v2|v3|v4]
+            version  -- the base version of the controller API [v2|v3|v4|v5]
             site_id  -- the site ID to connect to (UniFi >= 3.x)
 
         """
@@ -137,6 +137,8 @@ class Controller:
             return V3_PATH
         if(version == 'v4'):
             return V3_PATH
+        if(version == 'v5'):
+            return V3_PATH
         else:
             return V2_PATH
 
@@ -146,7 +148,7 @@ class Controller:
         params = {'username': self.username, 'password': self.password}
         login_url = self.url
 
-        if version == 'v4':
+        if version == 'v4' or version == 'v5':
             login_url += 'api/login'
             params = json.dumps(params)
         else:
