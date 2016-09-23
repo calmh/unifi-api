@@ -51,7 +51,7 @@ class Controller:
     >>> from unifi.controller import Controller
     >>> c = Controller('192.168.1.99', 'admin', 'p4ssw0rd')
     >>> for ap in c.get_aps():
-    ...     print 'AP named %s with MAC %s' % (ap['name'], ap['mac'])
+    ...     print 'AP named %s with MAC %s' % (ap.get('name'), ap['mac'])
     ...
     AP named Study with MAC dc:9f:db:1a:59:07
     AP named Living Room with MAC dc:9f:db:1a:59:08

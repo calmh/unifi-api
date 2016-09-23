@@ -16,7 +16,7 @@ args = parser.parse_args()
 c = Controller(args.controller, args.username, args.password, args.port, args.version, args.siteid)
 
 aps = c.get_aps()
-ap_names = dict([(ap['mac'], ap['name']) for ap in aps])
+ap_names = dict([(ap['mac'], ap.get('name')) for ap in aps])
 clients = c.get_clients()
 clients.sort(key=lambda x: -x['rssi'])
 

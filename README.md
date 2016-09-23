@@ -63,7 +63,7 @@ API Example
 from unifi.controller import Controller
 c = Controller('192.168.1.99', 'admin', 'p4ssw0rd')
 for ap in c.get_aps():
-	print 'AP named %s with MAC %s' % (ap['name'], ap['mac'])
+	print 'AP named %s with MAC %s' % (ap.get('name'), ap['mac'])
 ```
 
 See also the scripts `unifi-ls-clients` and `unifi-low-rssi-reconnect` for more
