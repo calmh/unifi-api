@@ -24,7 +24,7 @@ args = parser.parse_args()
 c = Controller(args.controller, args.username, args.password, args.port, args.version, args.siteid)
 
 all_aps = c.get_aps()
-ap_names = dict([(ap['mac'], ap['name']) for ap in all_aps])
+ap_names = dict([(ap['mac'], ap.get('name')) for ap in all_aps])
 
 kicks = defaultdict(int)
 held = defaultdict(bool)
