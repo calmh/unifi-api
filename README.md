@@ -1,5 +1,15 @@
+# This project is not actively maintained
+
+Issues and pull requests on this repository may not be acted on in a timely
+manner, or at all.  You are of course welcome to use it anyway. You are even
+more welcome to fork it and maintain the results.
+
+![Unmaintained](https://nym.se/img/unmaintained.jpg)
+
 unifi-api
 =========
+
+---
 
 A rewrite of https://github.com/unifi-hackers/unifi-lab in cleaner Python.
 
@@ -107,7 +117,7 @@ API
 ### `class Controller`
 
 Interact with a UniFi controller.
- 
+
 Uses the JSON interface on port 8443 (HTTPS) to communicate with a UniFi
 controller. Operations will raise unifi.controller.APIError on obvious
 problems (such as login failure), but many errors (such as disconnecting a
@@ -116,20 +126,20 @@ nonexistant client) will go unreported.
 ### `__init__(self, host, username, password)`
 
 Create a Controller object.
-     
+
  - `host`		-- the address of the controller host; IP or name
  - `username`	-- the username to log in with
  - `password`	-- the password to log in with
  -  `port`		-- the port of the controller host
  -  `version`	-- the base version of the controller API [v2|v3]
- -  `site_id`	-- the site ID to connect to (UniFi >= 3.x) 
- 
+ -  `site_id`	-- the site ID to connect to (UniFi >= 3.x)
+
 ### `block_client(self, mac)`
 
 Add a client to the block list.
 
  - `mac` -- the MAC address of the client to block.
- 
+
 ### `disconnect_client(self, mac)`
 
 Disconnects a client, forcing them to reassociate. Useful when the
@@ -144,7 +154,7 @@ Return a list of Alerts.
 ### `get_alerts_unarchived(self)`
 
 Return a list of unarchived Alerts.
- 
+
 ### `get_events(self)`
 
 Return a list of Events.
@@ -152,7 +162,7 @@ Return a list of Events.
 ### `get_aps(self)`
 
 Return a list of all AP:s, with significant information about each.
- 
+
 ### `get_clients(self)`
 
 Return a list of all active clients, with significant information about each.
@@ -166,7 +176,7 @@ Return statistical data of the last 24h
 Return statistical data last 24h from endtime
 
  - `endtime` -- the last time of statistics.
-        
+
 ### `get_users(self)`
 
 Return a list of all known clients, with significant information about each.
@@ -178,19 +188,19 @@ Return a list of user groups with its rate limiting settings.
 ### `get_wlan_conf(self)`
 
 Return a list of configured WLANs with their configuration parameters.
- 
+
 ### `restart_ap(self, mac)`
 
 Restart an access point (by MAC).
 
  - `mac` -- the MAC address of the AP to restart.
- 
+
 ### `restart_ap_name(self, name)`
 
 Restart an access point (by name).
 
  - `name` -- the name address of the AP to restart.
- 
+
 ### `unblock_client(self, mac)`
 
 Remove a client from the block list.
@@ -213,7 +223,7 @@ Remember that this puts significant load on a controller for some time (dependin
 Tells the controller to create a backup archive and downloads it to a file. It should have a .unf extension for later restore.
 
  - `targetfile` -- the target file name, you can also use a full path. Default creates unifi-backup.unf in the current directoy.
- 
+
 ### `authorize_guest(self, guest_mac, minutes, up_bandwidth=None, down_bandwidth=None, byte_quota=None, ap_mac=None)`
 
 Authorize a guest based on his MAC address.
@@ -224,7 +234,7 @@ Authorize a guest based on his MAC address.
    - `down_bandwith` -- down speed allowed in kbps (optional)
    - `byte_quota`    -- quantity of bytes allowed in MB (optional)
    - `ap_mac`        -- access point MAC address (UniFi >= 3.x) (optional)
- 
+
 ### `unauthorize_guest(self, guest_mac)`
 Unauthorize a guest based on his MAC address.
 
